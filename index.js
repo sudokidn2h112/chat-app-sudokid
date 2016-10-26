@@ -21,11 +21,11 @@ io.sockets.on('connection', function(socket){
     socket.on('client-send-username', function (data) {
     console.log('have signup with username: '+data);
     if(arrUsersOnline.indexOf(data) >=0){
-      socket.broadcast.emit('server-send-error', data);
+      socket.emit('server-send-error', data);
     }else {
       arrUsersOnline.push(data);
       socket.username = data;
-      socket.broadcast.emit('server-send-user-and-hide-signup')
+      socket.emit('server-send-user-and-hide-signup')
       io.sockets.emit('server-send-success', {id:socket.id, username: data});
     }
   })
@@ -33,7 +33,7 @@ io.sockets.on('connection', function(socket){
     io.sockets.emit('server-send-message', {username: socket.username, msg: data});
   });
   socket.on('client-to-client', function (data) {
-    io.to(data).broadcast.emit('server-send-client', {username: socket.username});
+    io.to(data).emit('server-send-client', {username: socket.username});
   });
 
   //Disconnect socketio
