@@ -1,0 +1,62 @@
+body{
+  background-color: gray;
+}
+#wrapper{
+  width: 600px;
+  margin: auto
+  }
+h1{
+  text-align: center;
+}
+.block{
+  width: 100%;
+  clear: both
+}
+#txtUser{
+  width: 30%
+}
+#btnDangki{
+  width: 30%
+}
+#listUsersOnline{
+  color: red
+}
+#left, #right{
+  min-height: 500px;
+  float: left;
+  margin-top: 10px
+}
+#left{
+  width: 30%;
+  background: #edea93
+}
+#right{
+  width: 70%;
+  background: #3b1c96
+}
+#txtMessage, #btnChat{
+  min-height: 30px;
+  float: left;
+  margin: 2px
+}
+#txtMessage{
+  width: 79%
+}
+#btnChat{
+  width: 18%
+}
+#title{
+  background-color: #5b961c;
+  text-align: center;
+  padding: 5px
+}
+.name{
+  color: red;
+  font-weight: bold;
+}
+#listMessage{
+  height: 450px;
+  color: yellow;
+  clear: both;
+  overflow-y: scroll
+}

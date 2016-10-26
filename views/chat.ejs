@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CHAT APP</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script>
+      var socket = io();
+        socket.on('server-send-error', function (data) {
+          alert("User " + data + " is availble!" )
+        });
+        socket.on('server-send-success', function (data) {
+          var h = "<div socketid = '"+data.id+"' class='motUser' > &hearts;: " + data.username + "</div>";
+          $("#listUsersOnline").append(h);
+        });
+        socket.on('server-send-message', function (data) {
+          var name = "<span class='name'>" + data.username + ": </span>";
+          var mes = "<span class='mes'>" + data.msg + "</span>";
+          $("#listMessage").append(name + mes + "<div class='block'></div>");
+        });
+        socket.on('server-send-client', function (data) {
+          alert(data.username + " vua choc ban kia ^^!")
+        });
+        socket.on('server-send-user-and-hide-signup', function () {
+          $("#txtUser").hide();
+          $("#btnDangki").hide();
+        });
+        socket.on('get-user', function (data) {
+          var user = data.arrUsersOnline.length;
+          if(user>0){
+            alert(data.message);
+          }
+        });
+      $(document).ready(function () {
+        $("#btnDangki").click(function () {
+          var name = $("#txtUser").val();
+          socket.emit('client-send-username', $("#txtUser").val())
+        });
+        $("#btnChat").click(function () {
+          var data = $("#txtMessage");
+          var data = $("#txtMessage").val();
+          if(data==""){
+            alert("Please input message");
+          }else {
+            socket.emit('client-send-message', $("#txtMessage").val())
+              $("#txtMessage").val("");
+          }
+        });
+        $(document).on("click", ".motUser", function () {
+          var id = $(this).attr("socketid");
+          socket.emit('client-to-client', id);
+        });
+      });
+    </script>
+    <link rel="stylesheet" href="main.css" type="text/css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>CHAT APP NẤM LÙN</h1>
+        <input type="text" id="txtUser" placeholder="Username" name="ten" class="form-control">
+        <button type="button" id="btnDangki" class="btn btn-primary">Join now!!!</button>
+      <div class="block"></div>
+      <div id="left">
+        <div id="title">Users Online</div>
+        <div id="listUsersOnline"></div>
+      </div>
+      <div id="right">
+        <div id="listMessage" ></div>
+        <div class="block"></div>
+        <input class="form-control" type="text" id="txtMessage" placeholder="Message...">
+        <button type="button" id="btnChat" class="btn btn-success">Send</button>
+      </div>
+    </div>
+  </body>
+</html>
