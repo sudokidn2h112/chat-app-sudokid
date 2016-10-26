@@ -41,12 +41,11 @@ io.sockets.on('connection', function(socket){
       arrUsersOnline.splice(arrUsersOnline.indexOf(socket.id), 1);
       updateUsernames();
       connections.splice(connections.indexOf(socket), 1);
-      console.log("Socket id %s disconnected", socket.id);
       console.log("Disconnected: %s sockets connected", connections.length);
     });
   //function update UserOnline
   function updateUsernames() {
-    io.sockets.emit('get-user', { arrUsersOnline,message: "User " + socket.username + " just leave" , id: socket.id});
+    io.sockets.emit('get-user', { arrUsersOnline, userLeave: socket.username,message: "User " + socket.username + " just leave" , id: socket.id});
   }
 });
 

@@ -19,7 +19,7 @@
           alert("User " + data + " is availble!" )
         });
         socket.on('server-send-success', function (data) {
-          var h = "<div socketid = '"+data.id+"' class='motUser' > &hearts;: " + data.username + "</div>";
+          var h = "<div socketid = '"+data.id+"' class="+data.username+"> &hearts;: " + data.username + "</div>";
           $("#listUsersOnline").append(h);
         });
         socket.on('server-send-message', function (data) {
@@ -35,21 +35,28 @@
           $("#btnDangki").hide();
         });
         socket.on('get-user', function (data) {
-          var user = data.arrUsersOnline.length;
-          if(user>0){
+          var users = data.arrUsersOnline.length;
+          if(users>0){
+            $("."+data.userLeave+"").remove();
             alert(data.message);
           }
         });
       $(document).ready(function () {
         $("#btnDangki").click(function () {
           var name = $("#txtUser").val();
-          socket.emit('client-send-username', $("#txtUser").val())
+          if(name==""){
+            alert("Please input username!");
+            document.getElementById("txtUser").focus();
+          }else {
+            socket.emit('client-send-username', $("#txtUser").val());
+          }
         });
         $("#btnChat").click(function () {
           var data = $("#txtMessage");
           var data = $("#txtMessage").val();
           if(data==""){
             alert("Please input message");
+            document.getElementById("txtMessage").focus();
           }else {
             socket.emit('client-send-message', $("#txtMessage").val())
               $("#txtMessage").val("");
@@ -74,7 +81,7 @@
         <div id="listUsersOnline"></div>
       </div>
       <div id="right">
-        <div id="listMessage" ></div>
+        <div id="listMessage"></div>
         <div class="block"></div>
         <input class="form-control" type="text" id="txtMessage" placeholder="Message...">
         <button type="button" id="btnChat" class="btn btn-success">Send</button>
